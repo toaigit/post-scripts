@@ -1,0 +1,86 @@
+#!/bin/bash
+#  Mount all file systems
+
+mountebs()
+{
+  local VOLID=$1
+  local fileowner=$2
+  local mountpoint=$3
+  local filecnt=$4
+
+  devarray=(/dev/xvdh /dev/xvdi /dev/xvdj /dev/xvdk /dev/xvhl /dev/xvhm /dev/xvhn /dev/xvho /dev/xvhp /dev/xvhq)
+
+# flag to check if it instance is Nitro-based instances
+# everytime, you attach an ebs device, it will create a new /dev/nvmeX
+  nvmecnt=`ls -l /dev | grep -c nvme`
+
+  DEVINFO=${devarray[$filecnt]}
+
+echo "$AWS ec2 attach-volume --device $DEVINFO --volume-id $VOLID --instance-id $INSTID --region=$REGION"
+
+$AWS ec2 attach-volume --device $DEVINFO --volume-id $VOLID --instance-id $INSTID --region=$REGION
+sleep 20
+state=$($AWS ec2 describe-volumes --region $REGION --volume-ids $VOLID --query  "Volumes[].Attachments[].State" --output text)
+if [ "$state" == "attached" ] ; then
+   echo "$VOLID attached successfully" 
+else
+   echo "$state ... Waitting another 40s for $VOLID to attach"
+   sleep 40
+   $AWS ec2 describe-volumes --region $REGION --volume-ids $VOLID --query  "Volumes[].Attachments[].State" --output text
+fi
+
+echo "Checking if the $DEVINFO has been initialized ..."
+#  note for Nitro-based instances the device info should be nvme
+if [ $nvmecnt -gt 1 ] ; then
+   DEVINFO=`ls -ltr /dev/nvme? | tail -1 | awk '{print $10}'` 
+   echo "Nitro-based DeviceInfo: $DEVINFO "
+fi
+
+echo "DeviceInfo to initialize: $DEVINFO "
+cnt=`file -s $DEVINFO | grep -c ': data'`
+if [ $cnt -ne 1 ] ; then
+   echo "Info: DEVICE $DEVINFO is already INITIALIZED."
+else
+   echo "Info: Initializing device $DEVINFO with mkfs ..."
+   mkfs -t ext4 $DEVINFO
+fi
+
+blkid $DEVINFO | awk '{print $2 " MOUNTP ext4 defaults,nofail  0 2"}' | sed s/\"//g > /tmp/fstab.tmp
+echo "Info:  Updating the /etc/fstab ..."
+cp -p /etc/fstab /etc/fstab.backup.$$
+sed "s:MOUNTP:$mountpoint:g" /tmp/fstab.tmp >> /etc/fstab
+
+mkdir -p $mountpoint
+echo "Info: Mounting $DEVINFO ..."
+mount -a
+chown $fileowner:$fileowner $mountpoint
+
+df -h 
+
+return 0
+
+} 
+
+########################################
+# main routing
+########################################
+
+. ./global.env
+
+
+if [ ! -f $EBSFILE ] ; then
+   echo "Info:  Nothing to mount..."
+   exit 1
+fi
+
+filecount=1
+cat $EBSFILE | while read inrec
+do
+  mountp=`echo $inrec | awk  '{print $2}'`
+  fowner=`echo $inrec | awk  '{print $3}'`
+  volinfo=`echo $inrec | awk '{print $4}'`
+  mountebs $volinfo  $fowner  $mountp  $filecount
+  filecount=$((filecount))
+done
+fi
+#  end of script

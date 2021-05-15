@@ -1,0 +1,16 @@
+#!/bin/bash
+# expecting /tmp/EIP.list
+
+. ./global.env
+
+export REGION=`curl http://169.254.169.254/latest/dynamic/instance-identity/document|grep region|awk -F\" '{print $4}'`
+
+export INSTID=`curl http://169.254.169.254/latest/meta-data/instance-id`
+if [ ! -f $EIPFILE ] ; then
+   exit 1
+fi
+
+EIPID=$(cat $EIPFILE | awk '{print $1}')
+echo "Running EIP association ... $AWS ec2 associate-address --instance-id $INSTID --allocation-id $EIPID --allow-reassociation --region $REGION"
+$AWS ec2 associate-address --instance-id $INSTID --allocation-id $EIPID --allow-reassociation --region $REGION
+echo "EIP association is OK ..."

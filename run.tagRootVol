@@ -1,0 +1,16 @@
+#!/bin/bash
+#  Tag the Root Volume with the instanceID
+
+echo "Tagging Root Volume ..."
+Instance_ID=$(curl -s http://169.254.169.254/latest/meta-data/instance-id)
+
+Instance_Name=$(aws ec2 describe-instances --instance-ids ${Instance_ID} \
+    --query 'Reservations[0].Instances[0].Tags[?Key==`Name`].Value' --output text)
+
+RootDeviceName=$(aws ec2 describe-instances --instance-ids ${Instance_ID} \
+    --query 'Reservations[0].Instances[0].RootDeviceName' --output text)
+
+RootVolumeId=$(aws ec2 describe-instances --instance-ids ${Instance_ID} \
+    --query "Reservations[0].Instances[0].BlockDeviceMappings[?DeviceName==\`${RootDeviceName}\`].Ebs.VolumeId" --output text)
+
+aws ec2 create-tags --resources ${RootVolumeId} --tags Key=Name,Value=RootVol-${Instance_Name}

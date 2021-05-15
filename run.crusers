@@ -1,0 +1,22 @@
+#!/bin/bash
+
+# toaivo:1002
+. ./global.env
+
+#export USERSLIST=/tmp/USERS.list
+
+if [ ! -f $USERSLIST ] ; then
+   echo "Info: No users to create.  SKIP."
+else
+   grep -v ^# $USERSLIST | while read inrec
+   do
+     userid=`echo $inrec | awk -F"," '{print $1}'`
+     uid=`echo $inrec | awk -F"," '{print $2}'`
+     cnt=`grep -c $userid /etc/passwd`
+     if [ $cnt -eq 0 ] ; then
+        echo "Adding $userid ..."
+        groupadd -g $uid $userid
+        useradd -u $uid -g $uid -m -c "$userid" -s "/bin/bash"  $userid
+     fi
+   done
+fi
