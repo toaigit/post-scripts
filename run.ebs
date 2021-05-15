@@ -3,6 +3,8 @@
 
 mountebs()
 {
+  echo "Inside mountebs function ..."
+
   local VOLID=$1
   local fileowner=$2
   local mountpoint=$3
@@ -15,7 +17,6 @@ mountebs()
   nvmecnt=`ls -l /dev | grep -c nvme`
 
   DEVINFO=${devarray[$filecnt]}
-
 echo "$AWS ec2 attach-volume --device $DEVINFO --volume-id $VOLID --instance-id $INSTID --region=$REGION"
 
 $AWS ec2 attach-volume --device $DEVINFO --volume-id $VOLID --instance-id $INSTID --region=$REGION
@@ -79,8 +80,8 @@ do
   mountp=`echo $inrec | awk  '{print $2}'`
   fowner=`echo $inrec | awk  '{print $3}'`
   volinfo=`echo $inrec | awk '{print $4}'`
+  echo "Calling mountebs function $volinfo $fowner $mountp $filecount ..."
   mountebs $volinfo  $fowner  $mountp  $filecount
   filecount=$((filecount))
 done
-fi
 #  end of script

@@ -8,6 +8,7 @@ RUNDIR=`dirname $0`
 #  The /tmp/build.txt was created by the userdata.sh in the terraform
 cat /tmp/build.txt | while read task
 do
+    echo "Calling $RUNDIR/$task"
     $RUNDIR/$task
 done
 
