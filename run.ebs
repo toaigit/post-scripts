@@ -32,7 +32,7 @@ fi
 echo "Checking if the $DEVINFO has been initialized ..."
 #  note for Nitro-based instances the device info should be nvme
 if [ $nvmecnt -gt 1 ] ; then
-   DEVINFO=`ls -ltr /dev/nvme? | tail -1 | awk '{print $10}'` 
+   DEVINFO=`ls -ltr /dev/nvme* | tail -1 | awk '{print $10}'` 
    echo "Nitro-based DeviceInfo: $DEVINFO "
 fi
 
