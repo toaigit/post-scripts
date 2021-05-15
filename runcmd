@@ -6,7 +6,7 @@ RUNDIR=`dirname $0`
 
 #. build.txt should contains something like run.ebs, run.eip, run.efs, run.crusers on each separate line
 #  The /tmp/build.txt was created by the userdata.sh in the terraform
-cat /tmp/build.txt | while read task
+cat $BUILDFILE | while read task
 do
     echo "Calling $RUNDIR/$task"
     $RUNDIR/$task
