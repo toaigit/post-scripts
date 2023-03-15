@@ -1,0 +1,12 @@
+#!/bin/bash
+#  still under experimental
+
+#  check to see if any additional filesystem to be attached and mount
+#  This is based on the volume tags for this server
+
+./vol2mount.sh
+./mountFS.sh
+
+# check to see if fixed ip is required for this server.
+# this is based on the reseved fix IP tags.
+
