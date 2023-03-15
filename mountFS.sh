@@ -55,6 +55,8 @@ return 0
 # main routing
 ########################################
 
+echo "Info: Inside mountFS.sh script."
+
 REGION=`curl -s http://169.254.169.254/latest/meta-data/public-hostname | awk -F. '{print $2}'`
 INSTID=`curl -s http://169.254.169.254/latest/meta-data/instance-id`
 

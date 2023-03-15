@@ -34,4 +34,4 @@ if [ -s $TFILE1 ] ; then
 else
    echo "Info: No additional volume to attach and mount."
 fi
-echo "End of vol2mount.sh script"
+echo "Info: End of vol2mount.sh script."
