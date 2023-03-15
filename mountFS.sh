@@ -4,7 +4,7 @@
 
 mountebs()
 {
-  echo "Inside mountebs function ..."
+  echo "Info: Inside mountebs function ..."
 
   local VOLID=$1
   local fileowner=$2
@@ -14,19 +14,19 @@ mountebs()
   devarray=(/dev/xvdh /dev/xvdi /dev/xvdj /dev/xvdk /dev/xvhl /dev/xvhm /dev/xvhn /dev/xvho /dev/xvhp /dev/xvhq)
 
   DEVINFO=${devarray[$filecnt]}
-  echo "aws ec2 attach-volume --device $DEVINFO --volume-id $VOLID --instance-id $INSTID --region=$REGION"
+  echo "Info: aws ec2 attach-volume --device $DEVINFO --volume-id $VOLID --instance-id $INSTID --region=$REGION"
   aws ec2 attach-volume --device $DEVINFO --volume-id $VOLID --instance-id $INSTID --region=$REGION
   sleep 30
   state=$(aws ec2 describe-volumes --region $REGION --volume-ids $VOLID --query  "Volumes[].Attachments[].State" --output text)
   if [ "$state" == "attached" ] ; then
-     echo "$VOLID attached successfully"
+     echo "Info: $VOLID attached successfully."
   else
-     echo "$state ... Waitting another 40s for $VOLID to attach"
+     echo "Info: $state ... It is taking a lot longer ... Waitting another 40s for $VOLID to attach."
      sleep 30
      aws ec2 describe-volumes --region $REGION --volume-ids $VOLID --query  "Volumes[].Attachments[].State" --output text
 fi
 
-echo "Checking if the $DEVINFO has been initialized ..."
+echo "Info: Checking if the $DEVINFO has been initialized ..."
 #  use readlink to handle Nitro Instance where the /dev/xvdAAA is a symbolic lik to nvmeXXX 
 cnt=`file -s $(readlink -f $DEVINFO) | grep -c ': data'`
 if [ $cnt -ne 1 ] ; then
@@ -41,7 +41,7 @@ echo "Info:  Updating the /etc/fstab ..."
 mkdir -p $mountpoint
 cp -p /etc/fstab /etc/fstab.backup.$$
 echo "$BLKID $mountpoint ext4 defaults,nofail 0 2" >> /etc/fstab
-echo "Info: Mounting $DEVINFO ..."
+echo "Info: Mounting device $DEVINFO ..."
 mount -a
 chown $fileowner:$fileowner $mountpoint
 
@@ -60,7 +60,7 @@ INSTID=`curl -s http://169.254.169.254/latest/meta-data/instance-id`
 
 EBSFILE=$1
 if [ ! -f $EBSFILE ] ; then
-   echo "Info:  Nothing to mount..."
+   echo "Info:  No extra volume to attach and mount..."
    exit 1
 fi
 
@@ -74,5 +74,5 @@ do
   mountebs $volinfo  $fowner  $mountp  $filecount
   filecount=$((filecount))
 done
-echo "End of script mountFS.sh"
+echo "Info: End of script mountFS.sh"
 #  end of script
