@@ -4,7 +4,7 @@
 #  It is best to execute this step last in your userdata.
 
 echo "Info: executing runeip-v2 script."
-export REGION=`curl -s http://169.254.169.254/latest/dynamic/instance-identity/document | jq .region | sed 's/"//g'
+export REGION=`curl -s http://169.254.169.254/latest/dynamic/instance-identity/document | jq .region | sed 's/"//g'`
 HN=`hostname`
 export INSTID=`curl http://169.254.169.254/latest/meta-data/instance-id`
 TMPVAR=`aws ec2 describe-addresses --region $REGION --query 'Addresses[*].[AllocationId,PublicIp]' --filter Name=tag:Name,Values=$HN --output text`
