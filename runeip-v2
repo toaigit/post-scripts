@@ -1,0 +1,22 @@
+#!/bin/bash
+#  This script check to see if there is an elastic IP for this server.
+#  if found, it will assign the elastic IP for this server
+#  It is best to execute this step last in your userdata.
+
+echo "Info: executing runeip-v2 script."
+export REGION=`curl -s http://169.254.169.254/latest/dynamic/instance-identity/document | jq .region | sed 's/"//g'
+HN=`hostname`
+export INSTID=`curl http://169.254.169.254/latest/meta-data/instance-id`
+TMPVAR=`aws ec2 describe-addresses --region $REGION --query 'Addresses[*].[AllocationId,PublicIp]' --filter Name=tag:Name,Values=$HN --output text`
+
+if [ -z "$TMPVAR" ] ; then
+   echo "Info: No Elastic IP for this host."
+else
+   echo "Info: Found Elastic IP for this host."
+   EIPID=`echo $TMPVAR | awk '{print $1}'`
+   EIP=`echo $TMPVAR | awk '{print $2}'`
+   aws ec2 associate-address --instance-id $INSTID --allocation-id $EIPID --region $REGION
+   echo "Info: Associated elastic IP $EIP to the instance."
+fi
+
+echo "Info: Completed the runeip-v2 script."
