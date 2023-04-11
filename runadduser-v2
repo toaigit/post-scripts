@@ -1,0 +1,10 @@
+#!/bin/bash
+USERFILE=$1
+cat $USERFILE | while read inrec
+do
+   userid=`echo $inrec | awk -F"," '{print $1}'`
+   uid=`echo $inrec | awk -F"," '{print $2}'`
+   name=`echo $inrec | awk -F"," '{print $3}'`
+   useradd -u $uid -s /bin/bash -m -d /home/$userid -c "$name" $userid
+done
+
