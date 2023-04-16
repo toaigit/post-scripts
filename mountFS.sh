@@ -43,6 +43,7 @@ cp -p /etc/fstab /etc/fstab.backup.$$
 echo "$BLKID $mountpoint ext4 defaults,nofail 0 2" >> /etc/fstab
 echo "Info: Mounting device $DEVINFO ..."
 mount -a
+echo "Info: Change owner $fileowner for $mountpoint"
 chown $fileowner:$fileowner $mountpoint
 
 df -h
