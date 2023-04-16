@@ -75,7 +75,7 @@ do
   fowner=`echo $inrec | awk  '{print $3}'`
   echo "Calling mountebs function $volinfo $fowner $mountp $filecount ..."
   mountebs $volinfo  $fowner  $mountp  $filecount
-  filecount=$((filecount))
+  filecount=$((filecount+1))
 done
 echo "Info: End of script mountFS.sh"
 #  end of script
