@@ -16,8 +16,8 @@ HN=`hostname -s`
 
 echo "Info: Inside of vol2mount.sh script."
 
-# list all volumes that available for this host (not mounted yet)
-aws ec2 describe-volumes --region us-west-2 --query "Volumes[].[VolumeId,State]" --filters "Name=tag:Server,Values=$HN" --output text | grep available > $TFILE1
+# list all volumes that available for this host (not mounted yet - available or in-use)
+aws ec2 describe-volumes --region us-west-2 --query "Volumes[].[VolumeId,State]" --filters "Name=tag:Server,Values=$HN" --output text > $TFILE1
 
 echo "Info: There is `wc -l $TFILE1` additional volume to mount."
 
