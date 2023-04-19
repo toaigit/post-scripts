@@ -8,7 +8,7 @@
 TFILE1=/tmp/tfile1.out
 TFILE2=/tmp/tfile2.out
 VOL2MOUNT=$EBSFILE
-HN=`hostname`
+HN=`hostname -s`
 
 :> $TFILE1
 :> $TFILE2
