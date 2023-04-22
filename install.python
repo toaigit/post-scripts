@@ -1,0 +1,82 @@
+#!/bin/bash
+
+dnf install zip git mlocate net-tools python39 -y
+alternatives --set python3 /usr/bin/python3.9
+dnf httpd python39-mod_wsgi -y
+
+# some gotcha on OEL8 - enable apache communication with other - ie, flask
+/usr/sbin/setsebool httpd_can_network_connect true
+systemctl stop firewalld
+
+#  create python cgi and Flask application folders
+mkdir /var/www/FlaskApp /var/www/python-cgi
+
+#  install Flask App python environment
+cd /var/www/FlaskApp
+python3 -m venv  env/test
+source env/test/bin/activate
+python -m pip install --upgrade pip
+pip install Flask
+
+#  enable apache wsgi module for apache
+echo - <<EOF > /etc/httpd/conf.modules.d/10-wsgi.conf
+<IfModule !wsgi_module>
+    LoadModule wsgi_module modules/mod_wsgi_python3.so
+</IfModule>
+EOF
+
+#  setup proxy for flask application
+echo - <EOF2 > /etc/httpd/conf.d/10-flask.conf
+LoadModule proxy_module modules/mod_proxy.so
+LoadModule proxy_http_module modules/mod_proxy_http.so
+
+WSGIScriptAlias /p/ /var/www/html/p/
+
+Alias /FlaskApp/ /var/www/FlaskApp/
+
+<Directory /var/www/FlaskApp>
+   AllowOverride None
+   Require all granted
+</Directory>
+
+ProxyPass "/FlaskApp/"  "http://127.0.0.1:5000/"
+ProxyPassReverse "/FlaskApp/"  "http://127.0.0.1:5000/"
+
+RequestHeader set X-Forwarded-Proto http
+RequestHeader set X-Forwarded-Prefix /
+EOF2
+
+#  simple python cgi script
+echo - <EOF3 > /var/www/html/p/hello.py
+def application(environ, start_response):
+    status = '200 OK'
+    output = b'Hooray, mod_wsgi is working'    
+
+    response_headers = [('Content-type', 'text/plain'),
+                        ('Content-Length', str(len(output)))]
+    start_response(status, response_headers)
+
+    return [output]
+
+EOF3
+
+#  simple hello work flask app
+echo - <EOF4 > /var/www/FlaskApp/app.py
+from flask import Flask
+app = Flask(__name__)
+
+@app.route("/")
+def hello():
+  return "Hello World from Flask!"
+
+if __name__ == "__main__":
+  app.run()
+EOF4
+
+# start python flask
+cd /var/www/FlaskApp
+source env/test/bin/activate
+python app.py > flaskapp.log 2>&1 &
+
+
+# end of python installation
