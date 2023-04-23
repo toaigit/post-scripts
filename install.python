@@ -7,7 +7,7 @@ systemctl stop firewalld
 #  install python and apache
 dnf install zip git mlocate net-tools python39 -y
 alternatives --set python3 /usr/bin/python3.9
-dnf install httpd -y
+dnf install httpd  -y
 dnf install  python39-mod_wsgi -y
 
 #  create python cgi and Flask application folders
@@ -35,6 +35,13 @@ cp -p hello.py /var/www/python-cgi/hello.py
 #  simple hello work flask app
 cp -p app.py /var/www/FlaskApp/app.py
 
+#  uncomment to enable ssl
+dnf install mod_ssl -y
+mkdir -p /etc/httpd/certs
+cp flask-ssl.conf /etc/httpd/conf.d/ssl.conf
+cp -p server.key /etc/httpd/certs/server.key
+cp -p server.crt /etc/httpd/certs/server.crt
+#cp -p server-chain.crt /etc/httpd/cert/server-chain.crt
 
 systemctl stop httpd
 systemctl start httpd
