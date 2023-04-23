@@ -7,7 +7,7 @@ systemctl stop firewalld
 #  install python and apache
 dnf install zip git mlocate net-tools python39 -y
 alternatives --set python3 /usr/bin/python3.9
-dnf install httpd y
+dnf install httpd -y
 dnf install  python39-mod_wsgi -y
 
 #  create python cgi and Flask application folders
