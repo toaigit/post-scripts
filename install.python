@@ -20,17 +20,21 @@ source env/test/bin/activate
 python -m pip install --upgrade pip
 pip install Flask
 
+if [ ! -d /tmp/post-scripts ] ; then
+   cd /tmp
+   git clone https://github.com/toaigit/post-scripts.git
+fi
+
+cd /tmp/post-scripts
 #  enable apache wsgi module for apache
 cp -p 10-wsgi.conf /etc/httpd/conf.modules.d/10-wsgi.conf
-
 #  setup proxy for flask application
 cp -p 10-flask.conf /etc/httpd/conf.d/10-flask.conf
-
 #  simple python cgi script
-cp -p hello.py /var/www/html/p/hello.py
-
+cp -p hello.py /var/www/python-cgi/hello.py
 #  simple hello work flask app
 cp -p app.py /var/www/FlaskApp/app.py
+
 
 systemctl stop httpd
 systemctl start httpd
