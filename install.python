@@ -73,10 +73,7 @@ if __name__ == "__main__":
   app.run()
 EOF4
 
-# start python flask
-cd /var/www/FlaskApp
-source env/test/bin/activate
-python app.py > flaskapp.log 2>&1 &
-
+systemctl stop httpd
+systemctl start httpd
 
 # end of python installation
