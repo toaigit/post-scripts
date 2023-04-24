@@ -32,6 +32,7 @@ cp -p 10-wsgi.conf /etc/httpd/conf.modules.d/10-wsgi.conf
 cp -p hello.py /var/www/python-cgi/hello.py
 #  simple hello work flask app
 cp -p app.py /var/www/FlaskApp/app.py
+cp -p startup-flask.sh /var/www/FlaskApp
 
 #  change the ownership of the /var/www/FlaskApp owner
 chown -R  appadmin:appadmin /var/www/FlaskApp
