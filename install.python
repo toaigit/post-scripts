@@ -28,22 +28,20 @@ fi
 cd /tmp/post-scripts
 #  enable apache wsgi module for apache
 cp -p 10-wsgi.conf /etc/httpd/conf.modules.d/10-wsgi.conf
-#  setup proxy for flask application
-cp -p proxy-flask.conf /etc/httpd/conf.d/proxy-flask.conf
 #  simple python cgi script
 cp -p hello.py /var/www/python-cgi/hello.py
 #  simple hello work flask app
 cp -p app.py /var/www/FlaskApp/app.py
 
-#  uncomment to enable ssl
+#  change the ownership of the /var/www/FlaskApp owner
+chown -R  appadmin:appadmin /var/www/FlaskApp
+
+#  enable ssl
 dnf install mod_ssl -y
 mkdir -p /etc/httpd/certs
 cp flask-ssl.conf /etc/httpd/conf.d/ssl.conf
 cp -p server.key /etc/httpd/certs/server.key
 cp -p server.crt /etc/httpd/certs/server.crt
 #cp -p server-chain.crt /etc/httpd/cert/server-chain.crt
-
-systemctl stop httpd
-systemctl start httpd
 
 # end of python installation
