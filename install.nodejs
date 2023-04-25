@@ -27,9 +27,8 @@ chown -R  appadmin:appadmin /var/www/ExpressJS
 #  enable ssl
 dnf install mod_ssl -y
 mkdir -p /etc/httpd/certs
-cp nodejs-ssl.conf /etc/httpd/conf.d/ssl.conf
+cp -p nodejs-ssl.conf /etc/httpd/conf.d/ssl.conf
 cp -p server.key /etc/httpd/certs/server.key
 cp -p server.crt /etc/httpd/certs/server.crt
 #cp -p server-chain.crt /etc/httpd/cert/server-chain.crt
 
-cp -p nodejs-ssl.conf /etc/httpd/conf.d/nodejs-ssl.conf
