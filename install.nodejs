@@ -12,9 +12,11 @@ if [ ! -d /tmp/post-scripts ] ; then
    git clone https://github.com/toaigit/post-scripts.git
 fi
 
+#  simple hello nodej with and without express package
+#  this folder must match the apache configuration file
+#  your userdata will execute the start-nodejs.sh command 
 cd /tmp/post-scripts
-#  simple hello nodej
-mkdir /var/www/ExpressJS
+mkdir /var/www/ExpressJS 
 cp -p nodejs-app.js /var/www/ExpressJS
 cp -p start-nodejs.sh /var/www/ExpressJS
 
