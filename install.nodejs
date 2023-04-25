@@ -1,11 +1,15 @@
 #!/bin/bash
 #  install nodejs
 # https://yum.oracle.com/oracle-linux-nodejs.html#InstallingNodeOnOL8
+
+echo "Info: install nodejs"
 dnf module enable nodejs:18 -y
 dnf module install nodejs -y
+echo "Info: install apache"
 dnf install httpd -y
 
 #  install express under the appacmin account
+echo "Info: install express as appadmin user"
 su - appadmin -c "npm install express"
 
 if [ ! -d /tmp/post-scripts ] ; then
@@ -16,6 +20,7 @@ fi
 #  simple hello nodej with and without express package
 #  this folder must match the apache configuration file
 #  your userdata will execute the start-nodejs.sh command 
+echo "Info:  Copy the nodjs application"
 cd /tmp/post-scripts
 mkdir /var/www/ExpressJS 
 cp -p nodejs-app.js /var/www/ExpressJS
@@ -25,6 +30,7 @@ cp -p start-nodejs.sh /var/www/ExpressJS
 #  change the ownership of the /var/www/ExpressJS
 chown -R  appadmin:appadmin /var/www/ExpressJS
 
+echo "Info: config httpd ssl"
 #  enable ssl
 dnf install mod_ssl -y
 mkdir -p /etc/httpd/certs
@@ -33,3 +39,4 @@ cp -p server.key /etc/httpd/certs/server.key
 cp -p server.crt /etc/httpd/certs/server.crt
 #cp -p server-chain.crt /etc/httpd/cert/server-chain.crt
 
+echo "install.nodejs script competed"
