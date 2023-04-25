@@ -1,6 +1,9 @@
 #!/bin/bash
 #  install nodejs
 # https://yum.oracle.com/oracle-linux-nodejs.html#InstallingNodeOnOL8
+# some gotcha on OEL8 - enable apache communication with other - ie, flask
+/usr/sbin/setsebool httpd_can_network_connect true
+systemctl stop firewalld
 
 echo "Info: install nodejs"
 dnf module enable nodejs:18 -y
@@ -39,4 +42,4 @@ cp -p server.key /etc/httpd/certs/server.key
 cp -p server.crt /etc/httpd/certs/server.crt
 #cp -p server-chain.crt /etc/httpd/cert/server-chain.crt
 
-echo "Info: install.nodejs script competed"
+echo "Info: install.nodejs script completed"
