@@ -3,6 +3,7 @@
 # https://yum.oracle.com/oracle-linux-nodejs.html#InstallingNodeOnOL8
 dnf module enable nodejs:18 -y
 dnf module install nodejs -y
+dnf install httpd -y
 
 #  install express under the appacmin account
 su - appadmin -c "npm install express"
