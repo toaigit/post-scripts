@@ -19,6 +19,7 @@ fi
 cd /tmp/post-scripts
 mkdir /var/www/ExpressJS 
 cp -p nodejs-app.js /var/www/ExpressJS
+cp -p express-app.js /var/www/ExpressJS
 cp -p start-nodejs.sh /var/www/ExpressJS
 
 #  change the ownership of the /var/www/ExpressJS
