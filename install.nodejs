@@ -8,10 +8,6 @@ dnf module install nodejs -y
 echo "Info: install apache"
 dnf install httpd -y
 
-#  install express under the appacmin account
-echo "Info: install express as appadmin user"
-su - appadmin -c "npm install express"
-
 if [ ! -d /tmp/post-scripts ] ; then
    cd /tmp
    git clone https://github.com/toaigit/post-scripts.git
@@ -27,6 +23,10 @@ cp -p nodejs-app.js /var/www/ExpressJS
 cp -p express-app.js /var/www/ExpressJS
 cp -p start-nodejs.sh /var/www/ExpressJS
 
+#  install express under the appacmin account
+echo "Info: install express as appadmin user"
+su - appadmin -c "cd /var/www/ExpressJS; npm install express"
+
 #  change the ownership of the /var/www/ExpressJS
 chown -R  appadmin:appadmin /var/www/ExpressJS
 
@@ -39,4 +39,4 @@ cp -p server.key /etc/httpd/certs/server.key
 cp -p server.crt /etc/httpd/certs/server.crt
 #cp -p server-chain.crt /etc/httpd/cert/server-chain.crt
 
-echo "install.nodejs script competed"
+echo "Info: install.nodejs script competed"
