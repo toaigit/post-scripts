@@ -22,13 +22,11 @@ mkdir /var/www/ExpressJS
 cp -p nodejs-app.js /var/www/ExpressJS
 cp -p express-app.js /var/www/ExpressJS
 cp -p start-nodejs.sh /var/www/ExpressJS
+chown -R  appadmin:appadmin /var/www/ExpressJS
 
 #  install express under the appacmin account
 echo "Info: install express as appadmin user"
 su - appadmin -c "cd /var/www/ExpressJS; npm install express"
-
-#  change the ownership of the /var/www/ExpressJS
-chown -R  appadmin:appadmin /var/www/ExpressJS
 
 echo "Info: config httpd ssl"
 #  enable ssl
