@@ -5,6 +5,10 @@
 /usr/sbin/setsebool httpd_can_network_connect true
 systemctl stop firewalld
 
+#  install some basic packets
+echo "Info:  Install some basic packages"
+dnf install git zip mlocate bind-utils net-tools -y
+
 echo "Info: install nodejs"
 dnf module enable nodejs:18 -y
 dnf module install nodejs -y
@@ -42,4 +46,4 @@ cp -p server.key /etc/httpd/certs/server.key
 cp -p server.crt /etc/httpd/certs/server.crt
 #cp -p server-chain.crt /etc/httpd/cert/server-chain.crt
 
-echo "Info: install.nodejs script completed"
+echo "Info: install.nodejs script completed."
