@@ -4,8 +4,12 @@
 /usr/sbin/setsebool httpd_can_network_connect true
 systemctl stop firewalld
 
+#  install some basic packets
+echo "Info:  Install some basic packages"
+dnf install git zip mlocate bind-utils net-tools -y
+
 #  install python and apache
-dnf install zip git mlocate net-tools python39 -y
+dnf install python39 -y
 alternatives --set python3 /usr/bin/python3.9
 dnf install httpd  -y
 dnf install  python39-mod_wsgi -y
