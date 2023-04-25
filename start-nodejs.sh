@@ -5,4 +5,4 @@ cd /var/www/ExpressJS
 #node app.js
 
 # start node app with express
-node express-app.js
+nohup node express-app.js > /var/log/nodejs.log 2>&1 &
