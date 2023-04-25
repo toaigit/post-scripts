@@ -23,6 +23,8 @@ cp -p nodejs-app.js /var/www/ExpressJS
 cp -p express-app.js /var/www/ExpressJS
 cp -p start-nodejs.sh /var/www/ExpressJS
 chown -R  appadmin:appadmin /var/www/ExpressJS
+mkdir /var/log/nodejs
+chown appadmin:appadmin /var/log/nodejs
 
 #  install express under the appacmin account
 echo "Info: install express as appadmin user"
