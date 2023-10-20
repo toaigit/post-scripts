@@ -4,7 +4,7 @@
 . ./global.env
 
 dnf install -y yum-utils
-dnf yum-config-manager --add-repo https://rpm.releases.hashicorp.com/RHEL/hashicorp.repo
-dnf yum -y install vault
+yum-config-manager --add-repo https://rpm.releases.hashicorp.com/RHEL/hashicorp.repo
+dnf install  -y vault
 
 echo "Info:  Installed vault. Done"
