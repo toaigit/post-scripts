@@ -16,3 +16,4 @@ enabled=1
 EOF
 
 dnf install -y shibboleth
+systemctl start shibd
