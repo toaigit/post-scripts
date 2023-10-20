@@ -1,0 +1,7 @@
+#!/bin/bash
+#  install mysql docker
+
+#  Build mysql docker container 
+runuser -l appadmin -c 'git clone https://github.com/toaigit/mysql-docker.git; cd mysql-docker; ./build.wpdb; ./startup'
+
+echo "Info:  installed mysql container.  Done"
