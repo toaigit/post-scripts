@@ -1,0 +1,13 @@
+#!/bin/bash
+#  run.docker
+
+. ./global.env
+
+dnf config-manager --add-repo=https://download.docker.com/linux/centos/docker-ce.repo
+dnf remove -y runc
+dnf install -y docker-ce --nobest
+systemctl enable docker.service
+systemctl start docker.service
+# usermod -a -G docker appadmin
+
+echo "Info:  Install docker completed."
