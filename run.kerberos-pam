@@ -1,0 +1,7 @@
+#!/bin/bash
+#  install kerberos client 
+cd /tmp
+dnf install -y krb5-workstation
+curl -o pam_krb5-client.rpm https://rpmfind.net/linux/epel/8/Everything/x86_64/Packages/p/pam_krb5-4.11-1.el8.x86_64.rpm
+#aws s3 cp s3://$BUCKET_NAME/infra/pam_krb5-4.11-1.el8.x86_64.rpm /tmp
+dnf install -y pam_krb5-client.rpm
