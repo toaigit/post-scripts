@@ -5,4 +5,4 @@ cp -p duosecurity.repo /etc/yum.repos.d
 rpm --import https://duo.com/DUO-GPG-PUBLIC-KEY.asc
 dnf install -y duo_unix
 cp -p pam_duo.conf /etc/duo
-
+chmod 700 /etc/duo/pam_duo.conf
