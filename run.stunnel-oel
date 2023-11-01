@@ -14,7 +14,7 @@ cat stunnel*.crt stunnel*.key > /etc/stunnel/stunnel.pem
 chmod 700 /etc/stunnel/stunnel.pem
 
 #  create the stunnel config file
-cat - << EOF > /etc/stunnel.conf
+cat - << EOF > /etc/stunnel/stunnel.conf
 #  this is the /etc/stunnel/stunnel.conf file
 #  Startup and shutdown with systemctl stop|start|status stunnel
 #  NOTE:  accept is the listening port; connect is routed to backend port
