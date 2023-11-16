@@ -58,7 +58,7 @@ return 0
 
 echo "Info: Inside mountFS.sh script."
 
-REGION=`curl -s http://169.254.169.254/latest/meta-data/public-hostname | awk -F. '{print $2}'`
+export REGION=`curl http://169.254.169.254/latest/dynamic/instance-identity/document|grep region|awk -F\" '{print $4}'`
 INSTID=`curl -s http://169.254.169.254/latest/meta-data/instance-id`
 
 EBSFILE=$1
